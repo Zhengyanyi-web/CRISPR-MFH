@@ -154,10 +154,6 @@ def main():
                 X_off_train, X_off_test = X_off[train_indices], X_off[test_indices]
                 y_train, y_test = labels[train_indices], labels[test_indices]
 
-                X_predict_test, X_predict_val, X_on_test, X_on_val, X_off_test, X_off_val, y_test, y_val = train_test_split(
-                    X_predict_test, X_on_test, X_off_test, y_test, test_size=0.2, random_state=RANDOM_SEED
-                )
-
                 y_train, y_test, y_val = map(lambda x: to_categorical(x, NUM_CLASSES), [y_train, y_test, y_val])
 
                 model_function = getattr(model_module, MODEL_NAME)
@@ -174,7 +170,7 @@ def main():
                     batch_size=BATCH_SIZE,
                     verbose=1,
                     callbacks=callbacks,
-                    validation_data=([X_predict_val, X_on_val, X_off_val], y_val),
+                    validation_split=0.2,
                 )
 
                 save_trained_model(dataset_name, model, MODEL_NAME, fold, MODEL_TAG)
